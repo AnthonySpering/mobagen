@@ -5,8 +5,13 @@
 #include "engine/Engine.h"
 
 Vector2f WindRule::computeForce(const std::vector<Boid*>& neighborhood, Boid* boid) {
-  // todo: add a wind force here
-  // hint: use the windAngle variable
+	float angle = windAngle;
+
+	float windStrength = 50.0f;
+	Vector2f windForce(std::cos(angle), std::sin(angle));
+
+	windForce *= windStrength;
+
   return Vector2f::zero();
 }
 

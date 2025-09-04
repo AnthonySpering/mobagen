@@ -37,7 +37,6 @@ bool BoundedAreaRule::drawImguiRuleExtra() {
   auto heightWindows = size.y;
   bool valueHasChanged = false;
 
-  // We cap the max separation as the third of the min of the width.height
   auto minHeightWidth = std::min(widthWindows, heightWindows);
 
   if (ImGui::SliderInt("Desired Distance From Borders", &desiredDistance, 0.0f, (int)(minHeightWidth / 3), "%i")) {

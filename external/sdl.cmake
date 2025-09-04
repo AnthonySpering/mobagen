@@ -58,6 +58,7 @@ message(STATUS "SDL2 TIME: ${DELTASDL}s")
 # SDL_image
 string(TIMESTAMP BEFORE "%s")
 CPMAddPackage(
+<<<<<<< HEAD
         NAME SDL_image
         GITHUB_REPOSITORY libsdl-org/SDL_image
         GIT_TAG release-2.8.8
@@ -69,6 +70,19 @@ CPMAddPackage(
         "SDL2IMAGE_VENDORED OFF"
         "SDL2IMAGE_BUILD_SHARED_LIBS OFF"
         "SDL2IMAGE_DEPS_SHARED OFF"
+=======
+  NAME SDL_image
+  GITHUB_REPOSITORY libsdl-org/SDL_image
+  GIT_TAG release-2.8.8
+  OPTIONS "BUILD_SHARED_LIBS OFF"
+          "SDL2_SHARED OFF"
+          "SDL_SHARED OFF"
+          "SDL2IMAGE_INSTALL OFF"
+          "SDL2IMAGE_SAMPLES OFF"
+          "SDL2IMAGE_VENDORED OFF"
+          "SDL2IMAGE_BUILD_SHARED_LIBS OFF"
+          "SDL2IMAGE_DEPS_SHARED OFF"
+>>>>>>> 40ea7496ec71b2a665785480c522d2561379b92f
 )
 if(SDL_image_ADDED)
   include_directories(${SDL_image_SOURCE_DIR}/include)

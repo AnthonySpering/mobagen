@@ -13,20 +13,16 @@ Vector2f BoundedAreaRule::computeForce(const std::vector<Boid*>& neighborhood, B
 	Vector2f pos = boid->getPosition();
 	float dist = (float)desiredDistance;
 
-	// Left wall
 	if (pos.x < dist) {
 		force.x += (dist - pos.x);
 	}
-	// Right wall
 	else if (pos.x > width - dist) {
 		force.x -= (pos.x - (width - dist));
 	}
 
-	// Top wall
 	if (pos.y < dist) {
 		force.y += (dist - pos.y);
 	}
-	// Bottom wall
 	else if (pos.y > height - dist) {
 		force.y -= (pos.y - (height - dist));
 	}

@@ -2,24 +2,44 @@
 #include "../gameobjects/Boid.h"
 #include "../gameobjects/World.h"
 #include "engine/Engine.h"
+#include <cmath>
 
 Vector2f SeparationRule::computeForce(const std::vector<Boid*>& neighborhood, Boid* boid) {
-  // Try to avoid boids too close
   Vector2f separatingForce = Vector2f::zero();
+  Vector2f positiosn = boid->transform.position;
 
-  //    float desiredDistance = desiredMinimalDistance;
-  //
-  //    // todo: implement a force that if neighbor(s) enter the radius, moves the boid away from it/them
-  //    if (!neighborhood.empty()) {
-  //        Vector2f position = boid->transform.position;
-  //        int countCloseFlockmates = 0;
-  //        // todo: find and apply force only on the closest mates
-  //    }
+  int countCloseFlockmates = 0;
 
-  separatingForce = Vector2f::normalized(separatingForce);
+  for (Boid* neighbor : neighborhood) {
+    if (neighbor == boid) continue;
+
+    Vector2f diff = positiosn - neighbor->transform.position;
+    float distSq = diff.x * diff.x + diff.y * diff.y;
+
+    if (distSq > 0.0f) {
+      float dist = std::sqrt(distSq);
+
+      if (dist < desiredMinimalDistance) {
+        Vector2f normDiff = diff / dist;
+        separatingForce += normDiff / dist;
+        countCloseFlockmates++;
+      }
+    }
+  }
+
+  if (countCloseFlockmates > 0) {
+    separatingForce /= (float)countCloseFlockmates;
+  }
+
+  float forceLenSq = separatingForce.x * separatingForce.x + separatingForce.y * separatingForce.y;
+  if (forceLenSq > 0.0f) {
+    float forceLen = std::sqrt(forceLenSq);
+    separatingForce /= forceLen;
+  }
 
   return separatingForce;
 }
+
 
 bool SeparationRule::drawImguiRuleExtra() {
   ImGui::SetCurrentContext(world->engine->window->imGuiContext);

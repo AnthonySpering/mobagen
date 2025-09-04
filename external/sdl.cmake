@@ -1,14 +1,14 @@
 set(SDL_SHARED
-        OFF
-        CACHE BOOL "SDL_SHARED"
+    OFF
+    CACHE BOOL "SDL_SHARED"
 )
 set(SDL_STATIC
-        ON
-        CACHE BOOL "SDL_STATIC"
+    ON
+    CACHE BOOL "SDL_STATIC"
 )
 set(SDL_STATIC_PIC
-        ON
-        CACHE BOOL "SDL_STATIC_PIC"
+    ON
+    CACHE BOOL "SDL_STATIC_PIC"
 )
 
 if(NOT DEFINED EMSCRIPTEN)
@@ -19,16 +19,16 @@ endif()
 # SDL2
 string(TIMESTAMP BEFORE "%s")
 CPMAddPackage(
-        NAME SDL2
-        GITHUB_REPOSITORY libsdl-org/SDL
-        GIT_TAG release-2.32.8
-        OPTIONS "SDL2_DISABLE_INSTALL ON"
-        "SDL2_SHARED OFF"
-        "SDL_SHARED OFF"
-        "SDL_STATIC ON"
-        "SDL_STATIC_PIC ON"
-        "SDL_WERROR OFF"
-        "SDL_TEST OFF"
+  NAME SDL2
+  GITHUB_REPOSITORY libsdl-org/SDL
+  GIT_TAG release-2.32.8
+  OPTIONS "SDL2_DISABLE_INSTALL ON"
+          "SDL2_SHARED OFF"
+          "SDL_SHARED OFF"
+          "SDL_STATIC ON"
+          "SDL_STATIC_PIC ON"
+          "SDL_WERROR OFF"
+          "SDL_TEST OFF"
 )
 find_package(SDL2 REQUIRED)
 if(SDL2_ADDED)
@@ -36,10 +36,10 @@ if(SDL2_ADDED)
 
   # Create a target that copies headers at build time, when they change
   add_custom_target(
-          sdl_copy_headers_in_build_dir
-          COMMAND ${CMAKE_COMMAND} -E copy_directory "${SDL_SOURCE_DIR}/include"
-          "${CMAKE_BINARY_DIR}/SDLHeaders/SDL2"
-          DEPENDS ${SDL_HEADERS}
+    sdl_copy_headers_in_build_dir
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${SDL_SOURCE_DIR}/include"
+            "${CMAKE_BINARY_DIR}/SDLHeaders/SDL2"
+    DEPENDS ${SDL_HEADERS}
   )
 
   # Make SDL depend from it
@@ -58,19 +58,6 @@ message(STATUS "SDL2 TIME: ${DELTASDL}s")
 # SDL_image
 string(TIMESTAMP BEFORE "%s")
 CPMAddPackage(
-<<<<<<< HEAD
-        NAME SDL_image
-        GITHUB_REPOSITORY libsdl-org/SDL_image
-        GIT_TAG release-2.8.8
-        OPTIONS "BUILD_SHARED_LIBS OFF"
-        "SDL2_SHARED OFF"
-        "SDL_SHARED OFF"
-        "SDL2IMAGE_INSTALL OFF"
-        "SDL2IMAGE_SAMPLES OFF"
-        "SDL2IMAGE_VENDORED OFF"
-        "SDL2IMAGE_BUILD_SHARED_LIBS OFF"
-        "SDL2IMAGE_DEPS_SHARED OFF"
-=======
   NAME SDL_image
   GITHUB_REPOSITORY libsdl-org/SDL_image
   GIT_TAG release-2.8.8
@@ -82,7 +69,6 @@ CPMAddPackage(
           "SDL2IMAGE_VENDORED OFF"
           "SDL2IMAGE_BUILD_SHARED_LIBS OFF"
           "SDL2IMAGE_DEPS_SHARED OFF"
->>>>>>> 40ea7496ec71b2a665785480c522d2561379b92f
 )
 if(SDL_image_ADDED)
   include_directories(${SDL_image_SOURCE_DIR}/include)

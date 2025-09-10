@@ -7,8 +7,7 @@
 #include "../gameobjects/World.h"
 #include "engine/Engine.h"
 
-FlockingRule::FlockingRule(const FlockingRule& toCopy)
-    : weight(toCopy.weight), debugColor(toCopy.debugColor), force(toCopy.force), isEnabled(toCopy.isEnabled), world(toCopy.world) {}
+FlockingRule::FlockingRule(const FlockingRule& toCopy): weight(toCopy.weight), debugColor(toCopy.debugColor), force(toCopy.force), isEnabled(toCopy.isEnabled), world(toCopy.world) {}
 
 Vector2f FlockingRule::computeWeightedForce(const std::vector<Boid*>& neighborhood, Boid* boid) {
   if (isEnabled) {

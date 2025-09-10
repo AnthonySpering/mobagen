@@ -5,15 +5,16 @@
 #include "engine/Engine.h"
 
 Vector2f WindRule::computeForce(const std::vector<Boid*>& neighborhood, Boid* boid) {
-	float angle = windAngle;
+  float angle = windAngle;
 
-	float windStrength = 50.0f;
-	Vector2f windForce(std::cos(angle), std::sin(angle));
+  float windStrength = 1.0f;
+  Vector2f windForce(std::cos(angle), std::sin(angle));
 
-	windForce *= windStrength;
+  windForce *= windStrength;
 
-  return Vector2f::zero();
+  return windForce; // return the actual wind
 }
+
 
 bool WindRule::drawImguiRuleExtra() {
   ImGui::SetCurrentContext(world->engine->window->imGuiContext);

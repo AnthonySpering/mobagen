@@ -7,7 +7,7 @@
 
 Manager::Manager(Engine* pEngine) : GameObject(pEngine) {
   world.Resize(sideSize);
-  rules.push_back(new HexagonGameOfLife());
+  //rules.push_back(new HexagonGameOfLife());
   rules.push_back(new JohnConway());
 }
 
@@ -61,6 +61,21 @@ void Manager::OnGui(ImGuiContext* context) {
     isSimulating = false;
   }
 
+  ImGui::SameLine();
+  if (ImGui::Button("Clear")) {
+    isSimulating = false;
+    clearBoard();
+  }
+
+  ImGui::SameLine();
+  if (ImGui::Button("Save")) {
+    save();
+  }
+
+  ImGui::SameLine();
+  if (ImGui::Button("Load")) {
+    load();
+  }
   ImGui::Text("TimeToNextStep: %.3f", (timeBetweenSteps - accumulatedTime));
   static auto newTime = timeBetweenSteps;
   if (ImGui::SliderFloat("Time Between Steps", &newTime, 0.0001f, 1.0f)) {
@@ -200,6 +215,20 @@ void Manager::clear() {
   isSimulating = false;
   world.Resize(sideSize);
 }
+
+//this is new
+void Manager::clearBoard() {
+  rules[ruleId]->clear(world);
+}
+
+void Manager::save() {
+  rules[ruleId]->save(world, "Wello");
+}
+
+void Manager::load() {
+  rules[ruleId]->load(world, "Wello");
+}
+
 Point2D Manager::mousePositionToIndex(ImVec2& mousePos) {
   auto windowSize = engine->window->size();
   auto center = Point2D(windowSize.x / 2, windowSize.y / 2);

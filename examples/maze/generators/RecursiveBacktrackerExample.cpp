@@ -3,9 +3,89 @@
 #include "RecursiveBacktrackerExample.h"
 #include <climits>
 bool RecursiveBacktrackerExample::Step(World* w) {
-  // todo: implement this
-  return false;
+  auto sideOver2 = w->GetSize() / 2;
+
+  // If no cells yet, pick a start point
+  if (stack.empty()) {
+    Point2D start = randomStartPoint(w);
+    if (start.x == INT_MAX) {
+      // no valid start point left -> finished
+      return false;
+    }
+    visited[start.y][start.x] = true;
+    stack.push_back(start);
+    w->SetNodeColor(start, Color::White);
+    return true;
+  }
+
+  Point2D prev = stack.back();
+  w->SetNodeColor(prev, Color::White);
+
+  Point2D current = stack.back();
+  w->SetNodeColor(current, Color::Black);
+
+  auto neighbors = getVisitables(w, current);
+
+
+  if (!neighbors.empty()) {
+    // choose random unvisited neighbor
+    Point2D next = neighbors[Random::Range(0, (int)neighbors.size() - 1)];
+    if (next.x == current.x + 1 && next.y == current.y) {
+      w->SetEast(current, false);
+      w->SetWest(next, false);
+    } else if (next.x == current.x - 1 && next.y == current.y) {
+      w->SetWest(current, false);
+      w->SetEast(next, false);
+    } else if (next.y == current.y + 1 && next.x == current.x) {
+      w->SetSouth(current, false);
+      w->SetNorth(next, false);
+    } else if (next.y == current.y - 1 && next.x == current.x) {
+      w->SetNorth(current, false);
+      w->SetSouth(next, false);
+    }
+    // carve passage between current and next
+    /*if (next.x == current.x + 1 && next.y == current.y) {
+      // east
+      //w->SetEast(current, false);
+      w->SetEast(prev, true);
+      w->SetSouth(next, false);
+      w->SetNorth(next, false);
+      w->SetEast(next, false);
+    } else if (next.x == current.x - 1 && next.y == current.y) {
+      // west
+      //w->SetWest(current, false);
+      w->SetWest(prev, true);
+      w->SetSouth(next, false);
+      w->SetNorth(next, false);
+      w->SetWest(next, false);
+    } else if (next.y == current.y + 1 && next.x == current.x) {
+      // south
+      //w->SetSouth(current, false);
+      w->SetSouth(prev, true);
+      w->SetEast(next, false);
+      w->SetWest(next, false);
+      w->SetSouth(next, false);
+    } else if (next.y == current.y - 1 && next.x == current.x) {
+      // north
+      //w->SetNorth(current, false);
+      w->SetNorth(prev, true);
+      w->SetEast(next, false);
+      w->SetWest(next, false);
+      w->SetNorth(next, false);
+    }*/
+    // mark and push
+    visited[next.y][next.x] = true;
+    w->SetNodeColor(next, Color::Red);
+    stack.push_back(next);
+  } else {
+    // backtrack
+    stack.pop_back();
+  }
+
+
+  return !stack.empty();
 }
+
 
 void RecursiveBacktrackerExample::Clear(World* world) {
   visited.clear();
@@ -32,8 +112,15 @@ Point2D RecursiveBacktrackerExample::randomStartPoint(World* world) {
 std::vector<Point2D> RecursiveBacktrackerExample::getVisitables(World* w, const Point2D& p) {
   auto sideOver2 = w->GetSize() / 2;
   std::vector<Point2D> visitables;
+  std::vector<Point2D> deltas = {Point2D::UP, Point2D::DOWN, Point2D::LEFT, Point2D::RIGHT};
 
-  // todo: implement this
-
+  for (auto d : deltas) {
+    Point2D n = {p.x + d.x, p.y + d.y};
+    if (n.x < -sideOver2 || n.x > sideOver2 || n.y < -sideOver2 || n.y > sideOver2) continue;
+    if (!visited[n.y][n.x]) {
+      visitables.push_back(n);
+    }
+  }
   return visitables;
 }
+

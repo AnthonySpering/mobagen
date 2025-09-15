@@ -20,7 +20,15 @@ file(
 
 install(FILES ${MAZE_INC} DESTINATION include/maze)
 
-add_executable(maze ${MAZE_SRC} ${MAZE_INC})
+add_executable(maze ${MAZE_SRC} ${MAZE_INC}
+        generators/GoDown.cpp
+        generators/GoDown.h
+        generators/GoLeft.cpp
+        generators/GoLeft.h
+        generators/GoRight.cpp
+        generators/GoRight.h
+        generators/GoUp.cpp
+        generators/GoUp.h)
 
 target_include_directories(maze PUBLIC ${SDL2_INCLUDE_DIR} ${CORE_INC_DIR})
 target_link_libraries(maze PUBLIC SDL2-static IMGUI core)

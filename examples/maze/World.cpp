@@ -4,11 +4,19 @@
 #include "generators/PrimExample.h"
 #include <chrono>
 #include "engine/Engine.h"
+#include "generators/GoDown.h"
+#include "generators/GoLeft.h"
+#include "generators/GoRight.h"
+#include "generators/GoUp.h"
 
 World::World(Engine* pEngine, int size = 11) : GameObject(pEngine), sideSize(size) {
-  generators.push_back(new PrimExample());
   generators.push_back(new RecursiveBacktrackerExample());
   generators.push_back(new HuntAndKillExample());
+  generators.push_back(new PrimExample());
+  generators.push_back(new GoDown());
+  generators.push_back(new GoLeft());
+  generators.push_back(new GoRight());
+  generators.push_back(new GoUp());
 }
 
 World::~World() {
@@ -102,7 +110,7 @@ void World::OnGui(ImGuiContext* context) {
 
 void World::OnDraw(SDL_Renderer* renderer) {
   auto windowSize = engine->window->size();
-  float linesize = (std::min(windowSize.x, windowSize.y) / (float)sideSize) * 0.9f;
+  float linesize = (std::min(windowSize.x, windowSize.y) / (float)sideSize);
 
   Vector2f displacement
       = {(windowSize.x / 2) - linesize * (sideSize / 2) - linesize / 2, (windowSize.y / 2) - linesize * (sideSize / 2) - linesize / 2};
@@ -160,7 +168,7 @@ void World::Clear() {
   // clear the color of the boxes;
   colors.clear();
   colors.resize(sideSize * sideSize);
-  for (int i = 0; i < sideSize * sideSize; i++) colors[i] = Color::DarkGray;
+  for (int i = 0; i < sideSize * sideSize; i++) colors[i] = Color::Gray;
 
   // clear maze generators
   for (int i = 0; i < generators.size(); i++) generators[i]->Clear(this);

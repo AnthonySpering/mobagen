@@ -9,6 +9,9 @@ public:
   std::string GetName() override { return "Hexagon"; }
   void Step(World& world) override;
   int CountNeighbors(World& world, Point2D point);
+  void clear(World& world);
+  void save(World& world, const std::string& filename);
+  void load(World& world, const std::string& filename);
   GameOfLifeTileSetEnum GetTileSet() override { return GameOfLifeTileSetEnum::Hexagon; };
 };
 

@@ -7,7 +7,7 @@
 
 Manager::Manager(Engine* pEngine) : GameObject(pEngine) {
   world.Resize(sideSize);
-  //rules.push_back(new HexagonGameOfLife());
+  rules.push_back(new HexagonGameOfLife());
   rules.push_back(new JohnConway());
 }
 

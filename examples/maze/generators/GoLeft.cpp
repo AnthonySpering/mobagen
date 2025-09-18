@@ -21,7 +21,7 @@ bool GoLeft::Step(World* w) {
 
     Point2D current = stack.back();
     // mark current cell red
-    w->SetNodeColor(current, Color::Black);
+    w->SetNodeColor(current, Color::PaleGoldenrod);
 
     auto neighbors = getVisitables(w, current);
 
@@ -64,6 +64,8 @@ bool GoLeft::Step(World* w) {
     } else {
         // backtrack if no neighbors
         stack.pop_back();
+        w->SetNodeColor(current, Color::Black);
+
     }
 
     return !stack.empty();

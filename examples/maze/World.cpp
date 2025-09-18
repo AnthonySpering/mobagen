@@ -1,4 +1,6 @@
 #include "World.h"
+
+#include "SDL_pixels.h"
 #include "generators/HuntAndKillExample.h"
 #include "generators/RecursiveBacktrackerExample.h"
 #include "generators/PrimExample.h"
@@ -110,7 +112,7 @@ void World::OnGui(ImGuiContext* context) {
 
 void World::OnDraw(SDL_Renderer* renderer) {
   auto windowSize = engine->window->size();
-  float linesize = (std::min(windowSize.x, windowSize.y) / (float)sideSize);
+  float linesize = (std::min(windowSize.x, windowSize.y) / (float)sideSize * 0.9f);
 
   Vector2f displacement
       = {(windowSize.x / 2) - linesize * (sideSize / 2) - linesize / 2, (windowSize.y / 2) - linesize * (sideSize / 2) - linesize / 2};

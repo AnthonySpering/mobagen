@@ -6,6 +6,7 @@
 #include "generators/PrimExample.h"
 #include <chrono>
 #include "engine/Engine.h"
+#include "generators/Binary.h"
 #include "generators/GoDown.h"
 #include "generators/GoLeft.h"
 #include "generators/GoRight.h"
@@ -15,6 +16,7 @@ World::World(Engine* pEngine, int size = 11) : GameObject(pEngine), sideSize(siz
   generators.push_back(new RecursiveBacktrackerExample());
   generators.push_back(new HuntAndKillExample());
   generators.push_back(new PrimExample());
+  generators.push_back(new Binary());
   generators.push_back(new GoDown());
   generators.push_back(new GoLeft());
   generators.push_back(new GoRight());

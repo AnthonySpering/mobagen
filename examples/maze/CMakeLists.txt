@@ -28,7 +28,10 @@ add_executable(maze ${MAZE_SRC} ${MAZE_INC}
         generators/GoRight.cpp
         generators/GoRight.h
         generators/GoUp.cpp
-        generators/GoUp.h)
+        generators/GoUp.h
+        generators/Binary.cpp
+        generators/Binary.h
+)
 
 target_include_directories(maze PUBLIC ${SDL2_INCLUDE_DIR} ${CORE_INC_DIR})
 target_link_libraries(maze PUBLIC SDL2-static IMGUI core)

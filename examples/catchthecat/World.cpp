@@ -4,6 +4,28 @@
 #include "scene/Transform.h"
 #include "engine/Engine.h"
 
+std::vector<Point2D> World::getVisitableNeighbors(const Point2D& p) {
+  std::vector<Point2D> neighbors;
+
+  // list all six directions
+  Point2D dirs[] = { NE(p), NW(p), E(p), W(p), SE(p), SW(p) };
+
+  for (auto& n : dirs) {
+    // check if in bounds
+    if (!isValidPosition(n)) continue;
+
+    // skip if occupied (blocker or catcher)
+    if (getContent(n)) continue;
+
+    // skip cat itself
+    if (n == catPosition) continue;
+
+    neighbors.push_back(n);
+  }
+
+  return neighbors;
+}
+
 void World::print() {
   auto catposid = catPosition.y * (sideSize / 2) + catPosition.x + sideSize * sideSize / 2;
   for (int i = 0; i < worldState.size();) {

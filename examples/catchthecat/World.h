@@ -73,6 +73,7 @@ public:
   // get the content of a given
   bool getContent(const int& x, const int& y) const { return worldState[(y + sideSize / 2) * (sideSize) + x + sideSize / 2]; }
 
+  std::vector<Point2D> getVisitableNeighbors(const Point2D& p);
   // print the world state
   void print();
 

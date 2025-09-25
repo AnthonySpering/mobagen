@@ -18,7 +18,7 @@ bool RecursiveBacktrackerExample::Step(World* w) {
   }
 
   Point2D current = stack.back();
-  w->SetNodeColor(current, Color::Firebrick);
+  w->SetNodeColor(current, Color::Thistle);
 
   auto neighbors = getVisitables(w, current);
 
@@ -90,8 +90,6 @@ std::vector<Point2D> RecursiveBacktrackerExample::getVisitables(World* w, const 
       visitables.push_back(n);
     }
   }
-
-
   return visitables;
 }
 

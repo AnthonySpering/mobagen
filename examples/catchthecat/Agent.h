@@ -7,6 +7,7 @@ class World;
 
 class Agent {
 public:
+  virtual ~Agent() = default;
   explicit Agent() = default;
 
   virtual Point2D Move(World*) = 0;

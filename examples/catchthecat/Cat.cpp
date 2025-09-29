@@ -1,24 +1,21 @@
 #include "Cat.h"
 #include "World.h"
-#include <stdexcept>
 
 Point2D Cat::Move(World* world) {
-  auto rand = Random::Range(0, 5);
-  auto pos = world->getCat();
-  switch (rand) {
-    case 0:
-      return World::NE(pos);
-    case 1:
-      return World::NW(pos);
-    case 2:
-      return World::E(pos);
-    case 3:
-      return World::W(pos);
-    case 4:
-      return World::SW(pos);
-    case 5:
-      return World::SE(pos);
-    default:
-      throw "random out of range";
+  auto path = generatePath(world);
+
+  if (!path.empty()) {
+    return path[0];  // best move toward border
   }
+
+  // Cat is trapped, so move randomly to a free neighboring tile
+  auto neighbors = world->getVisitableNeighbors(world->getCat());
+  if (!neighbors.empty()) {
+    return neighbors[Random::Range(0, neighbors.size() - 1)];
+  }
+
+  // No free neighbors, must stay in place
+  return world->getCat();
 }
+
+

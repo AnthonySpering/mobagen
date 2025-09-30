@@ -1,21 +1,23 @@
 #include "Cat.h"
 #include "World.h"
+#include <vector>
+#include <algorithm>
 
 Point2D Cat::Move(World* world) {
+  // Use the same A* routine the Agent has, but goal is the border
   auto path = generatePath(world);
 
+  // If a path exists, move to the first step (path[0])
   if (!path.empty()) {
-    return path[0];  // best move toward border
+    return path.front();
   }
 
-  // Cat is trapped, so move randomly to a free neighboring tile
-  auto neighbors = world->getVisitableNeighbors(world->getCat());
-  if (!neighbors.empty()) {
-    return neighbors[Random::Range(0, neighbors.size() - 1)];
+  // fallback: random move if trapped
+  auto pos = world->getCat();
+  auto neighs = world->getVisitableNeighbors(pos);
+  if (!neighs.empty()) {
+    return neighs[Random::Range(0, (int)neighs.size() - 1)];
   }
 
-  // No free neighbors, must stay in place
-  return world->getCat();
+  return pos; // completely stuck
 }
-
-

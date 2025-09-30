@@ -1,68 +1,77 @@
 #include "Agent.h"
-#include <unordered_set>
 #include <unordered_map>
 #include <queue>
+#include <vector>
+#include <limits>
 #include "World.h"
-#include <algorithm>
-#include "math/Point2D.h"
 
+#include <algorithm>
+
+using namespace std;
 
 struct Node {
-  Point2D pos;
-  int g;
-  int f;
-  bool operator>(const Node& other) const { return f > other.f; }
+    Point2D pos;
+    int g;  // cost so far
+    int f;  // total estimated cost (g + h)
+    bool operator>(const Node& other) const {
+        return f > other.f;
+    }
 };
 
-std::vector<Point2D> Agent::generatePath(World* w) {
-  auto catPos = w->getCat();
-  auto side = w->getWorldSideSize();
-  Point2D borderExit = Point2D::INFINITE;
+// heuristic: distance to nearest border
+static int heuristic(const Point2D& p, int side) {
+    int dx = side - abs(p.x);
+    int dy = side - abs(p.y);
+    return min(dx, dy);
+}
 
-  auto heuristicToBorder = [&](const Point2D& p) {
-    int half = side / 2;
-    return std::min({ half - abs(p.x), half - abs(p.y) });
-  };
+vector<Point2D> Agent::generatePath(World* w) {
+    unordered_map<Point2D, Point2D> cameFrom;
+    unordered_map<Point2D, int> gScore;
 
-  std::priority_queue<Node, std::vector<Node>, std::greater<Node>> frontier;
-  frontier.push({catPos, 0, heuristicToBorder(catPos)});
+    auto cmp = [](const Node& a, const Node& b) { return a.f > b.f; };
+    priority_queue<Node, vector<Node>, decltype(cmp)> frontier(cmp);
 
-  std::unordered_map<Point2D, Point2D> cameFrom;
-  std::unordered_map<Point2D, int> gScore;
-  gScore[catPos] = 0;
+    auto catPos = w->getCat();
+    int side = w->getWorldSideSize() / 2;
 
-  std::unordered_set<Point2D> visited;
+    frontier.push({catPos, 0, heuristic(catPos, side)});
+    gScore[catPos] = 0;
 
-  while (!frontier.empty()) {
-    Node current = frontier.top();
-    frontier.pop();
+    Point2D borderExit = Point2D::INFINITE;
 
-    if (visited.count(current.pos)) continue;
-    visited.insert(current.pos);
+    while (!frontier.empty()) {
+        Node current = frontier.top();
+        frontier.pop();
 
-  if (w->catWinsOnSpace(current.pos)) {
-      borderExit = current.pos;
-      break;
+        // reached border → goal
+        if (abs(current.pos.x) == side || abs(current.pos.y) == side) {
+            borderExit = current.pos;
+            break;
+        }
+
+        for (auto& neigh : w->getVisitableNeighbors(current.pos)) {
+            int tentativeG = gScore[current.pos] + 1;
+
+            if (!gScore.count(neigh) || tentativeG < gScore[neigh]) {
+                gScore[neigh] = tentativeG;
+                int f = tentativeG + heuristic(neigh, side);
+                frontier.push({neigh, tentativeG, f});
+                cameFrom[neigh] = current.pos;
+            }
+        }
     }
 
-    for (auto& neighbor : w->getVisitableNeighbors(current.pos)) {
-      int tentative_g = gScore[current.pos] + 1;
-
-      if (!gScore.count(neighbor) || tentative_g < gScore[neighbor]) {
-        cameFrom[neighbor] = current.pos;
-        gScore[neighbor] = tentative_g;
-        int f = tentative_g + heuristicToBorder(neighbor);
-        frontier.push({neighbor, tentative_g, f});
-      }
+    // reconstruct path
+    vector<Point2D> path;
+    if (borderExit != Point2D::INFINITE) {
+        Point2D cur = borderExit;
+        while (cur != catPos) {
+            path.push_back(cur);
+            cur = cameFrom[cur];
+        }
+        ranges::reverse(path.begin(), path.end());
     }
-  }
 
-  std::vector<Point2D> path;
-  if (borderExit != Point2D::INFINITE) {
-    for (Point2D cur = borderExit; cur != catPos; cur = cameFrom[cur]) {
-      path.push_back(cur);
-    }
-    std::reverse(path.begin(), path.end());
-  }
-  return path;
+    return path;
 }

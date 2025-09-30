@@ -4,8 +4,11 @@
 #include "scene/Transform.h"
 #include "engine/Engine.h"
 
+
+
 std::vector<Point2D> World::getVisitableNeighbors(const Point2D& p) {
   std::vector<Point2D> neighbors;
+
 
   Point2D dirs[] = { NE(p), NW(p), E(p), W(p), SE(p), SW(p) };
 
@@ -147,7 +150,7 @@ void World::OnGui(ImGuiContext* context) {
       clearWorld();
     }
   }
-  if (ImGui::SliderFloat("Turn Duration", &timeBetweenAITicks, 0.1, 30) && sideSize != (newSize / 2) * 2 + 1) {
+  if (ImGui::SliderFloat("Turn Duration", &timeBetweenAITicks, 0.0, 30) && sideSize != (newSize / 2) * 2 + 1) {
     sideSize = (newSize / 2) * 2 + 1;
     clearWorld();
   }

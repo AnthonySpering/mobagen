@@ -12,7 +12,7 @@
 
 class World : GameObject {
 private:
-  float timeBetweenAITicks = 1;
+  float timeBetweenAITicks = 0;
   float timeForNextTick = 1;
   bool catTurn = true;
   bool isSimulating = false;
@@ -30,11 +30,7 @@ private:
 
   // size of the side of the map
   int sideSize = 0;
-  // todo: optimization make the world state only use 16 Bytes.
-  // hints on how to do it:
-  // the world have 11x11 size, so it needs 121 bits to represent it. in other words we need 16 bytes to fully represent it. bit representation: 0
-  // empty, 1 blocked. to represent the cat position we need only one byte. 4 bits for X and another 4 for Y create a structure holding one byte for
-  // cat position and 16 bytes for the blocked map.
+
 
   // clears the world
   void clearWorld();
